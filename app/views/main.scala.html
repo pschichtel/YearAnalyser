@@ -1,0 +1,13 @@
+@()(content: Html)
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Year Analyser</title>
+        <link rel="stylesheet" media="screen" href="@routes.HomeController.getAsset("stylesheets/main.css")">
+        <link rel="shortcut icon" type="image/png" href="@routes.HomeController.getAsset("images/favicon.png")">
+    </head>
+    <body>
+        @content
+    </body>
+    <script src="@routes.HomeController.getAsset("javascripts/main.js")" type="text/javascript"></script>
+</html>

@@ -1,0 +1,14 @@
+logs
+project/project
+target
+.idea
+conf/local.conf
+data
+deploy
+/*.sql
+/*.yml
+.dockerignore
+Dockerfile
+Jenkinsfile
+.git
+.gitignore
