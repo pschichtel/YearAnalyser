@@ -2,7 +2,9 @@ name := "YearAnalyser"
  
 version := "1.0" 
       
-lazy val `yearanalyser` = (project in file(".")).enablePlugins(PlayScala)
+lazy val `yearanalyser` = (project in file("."))
+    .enablePlugins(PlayScala)
+    .enablePlugins(AshScriptPlugin)
 
 resolvers += "scalaz-bintray" at "https://dl.bintray.com/scalaz/releases"
       
