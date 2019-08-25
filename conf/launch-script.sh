@@ -1,11 +1,11 @@
 #!/usr/bin/env sh
 
 addJava() {
-    return 0
+    return 0 # Java is where it needs to be
 }
 
 is_cygwin() {
-    return 1 # we don't care fore cygwin
+    return 1 # we don't care for cygwin
 }
 
 app_home="$(dirname "$(dirname "$(realpath "$0")")")"
