@@ -18,4 +18,12 @@ libraryDependencies ++= Seq(
     "net.sf.biweekly" % "biweekly" % "0.6.3",
 )
 
+scalacOptions ++= Seq("unchecked", "-deprecation")
+
+sources in (Compile, doc) := Seq.empty
+
+publishArtifact in (Compile, packageDoc) := false
+
+bashScriptTemplateLocation := `yearanalyser`.base / "conf" / "launch-script.sh"
+
       

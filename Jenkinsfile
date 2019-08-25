@@ -6,7 +6,7 @@ node {
     }
 
     stage('Build image') {
-        app = docker.build("docker.cubyte.org/pschichtel/mailmanager")
+        app = docker.build("docker.cubyte.org/pschichtel/yearanalyser")
     }
 
     stage('Push image') {
