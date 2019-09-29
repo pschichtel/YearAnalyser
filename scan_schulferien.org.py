@@ -1,13 +1,57 @@
-# coding=utf-8
+import os
+
 from requests import *
 import re
+import html
+from functools import reduce
 
-def sluggify(s):
-    return re.sub('[^a-z0-9_-]', '', re.sub('[\\s\']', '-', s.lower().replace('ä', 'ae').replace('ö', 'oe').replace('ü', 'ue').replace('ß', 'ss')))
 
-countries = ['deutschland', 'oesterreich', 'schweiz', 'belgien', 'bosnien-herzegowina', 'daenemark', 'frankreich', 'italien', 'neuseeland', 'neuseeland', 'holland', 'norwegen', 'polen', 'slowakei', 'tschechien']
-years = set(['2019', '2020'])
-key = 'MiGcW0caRfdQoIHiIFqciByx8oIjmOQHGvTHgfc9MNrDIGVbiiTYxxMLjlMn_EuGfJM2iLzjX6pwaXak99Jqz7o9E5oCGE61KP3yG7H_qk0'
+def sluggify(str, country):
+    pattern_substitutions = [
+        ('[\\s\']', '-'),
+        ('[^a-z0-9_-]', ''),
+    ]
+
+    string_substitutions = [
+        ('ø', 'o'),
+        ('ä', 'ae'),
+        ('ö', 'oe'),
+        ('ü', 'ue'),
+        ('ß', 'ss')
+    ]
+
+    if country == 'norwegen':
+        string_substitutions.insert(0, ('ö', 'o'))
+        string_substitutions.insert(0, ('süd-', 'sor-'))
+        string_substitutions.append((' und ', ' og '))
+        string_substitutions.append(('trondelag', 'trndelag'))
+
+    if country == 'daenemark':
+        string_substitutions.insert(0, ('ø', ''))
+
+    lower = str.lower()
+    string_replaced = reduce(lambda s, sub: s.replace(sub[0], sub[1]), string_substitutions, lower)
+    patterns_replaced = reduce(lambda s, sub: re.sub(sub[0], sub[1], s), pattern_substitutions, string_replaced)
+
+    return patterns_replaced
+
+
+countries = {'deutschland': 'Germany',
+             'oesterreich': 'Austria',
+             'schweiz': 'Schweiz',
+             'belgien': 'Belgium',
+             'bosnien-herzegowina': 'Bosnia and Herzegovina',
+             'daenemark': 'Denmark',
+             'frankreich': 'France',
+             'italien': 'Italy',
+             'neuseeland': 'New Zealand',
+             'holland': 'Netherlands',
+             'norwegen': 'Norway',
+             'polen': 'Poland',
+             'slowakei': 'Slovakia',
+             'tschechien': 'Czech Republic'}
+years = {'2019', '2020'}
+key = 'gtKpiU0wvhD-I4OeolKZEgP6SHnlBeqLqQUcj6odAtI2Cnqdip0IE9IhzrbL2Yu3zeAQZMt9dAX2lMkqRhq-fRnbfI3nHecFZbMC6kOFdp8'
 
 url_tpl = 'https://www.schulferien.org/{}/ical/'
 
@@ -18,25 +62,29 @@ dl_url_tpl = dl_url_tpl_base + '/{}/feiertage_{}.ics?k={}'
 s = Session()
 
 urls = []
-for country in countries:
+for country, country_name in countries.items():
     url = url_tpl.format(country)
     result = s.get(url)
-    for (state, slug, year, kind_name) in [(state, sluggify(state), year, kind) for (kind, year, state) in set(re.findall('<a\s+[^>]+"iCal (Feiertage|Schulferien) (\d\d\d\d) ([^"]+)"', result.text))]:
+    for (state, year, kind_name) in [(html.unescape(state), year, kind) for (kind, year, state) in set(re.findall('<a\s+[^>]+"iCal (Feiertage|Schulferien) (\d\d\d\d) ([^"]+)"', result.text))]:
+        slug = sluggify(state, country)
         kind = 'ferien' if kind_name == 'Schulferien' else 'feiertage'
         if year in years:
             url = dl_url_tpl_per_state.format(country, kind, slug, year, key)
-            print(url)
-            urls.append((country + '_' + slug + '_' + kind + '_' + year + ".ics", url))
+            print("{} / {} / {} -> {}".format(country, state, year, url))
+            urls.append((state + '.ics', url, country_name, year))
     for year in years:
         url = dl_url_tpl.format(country, year, key)
         print(url)
-        urls.append((country + '_feiertage_' + year + ".ics", url))
+        urls.append(('Holidays.ics', url, country_name, year))
 
-for filename, url in urls:
+for filename, url, country_name, year in urls:
     result = s.get(url)
     print('Getting: ' + filename + ' from ' + url)
+    target_base = os.path.join('data', 'schulferien.org', str(year), country_name)
+    os.makedirs(target_base, exist_ok=True)
+    target = os.path.join(target_base, filename)
     if result.status_code == 200:
-        with open('data/schulferien.org/' + filename, 'wb') as f:
+        with open(target, 'wb') as f:
             f.write(result.content)
 
 
