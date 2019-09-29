@@ -9,9 +9,11 @@ import scala.concurrent.Future
 
 trait DatedEventSource {
     def getEvents(year: Int, timeZone: TimeZone): Future[Seq[DatedEvent]]
+    def name: String
+    def id: String
 }
 
-case class DatedEvent(id: String, name: String, start: LocalDate, end: LocalDate) {
+case class DatedEvent(id: String, name: String, source: String, start: LocalDate, end: LocalDate) {
     def isWithin(date: LocalDate): Boolean = (date.isAfter(start) || date.isEqual(start)) && date.isBefore(end)
 }
 

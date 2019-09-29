@@ -9,11 +9,13 @@ import scala.concurrent.Future
 import scala.concurrent.Future.successful
 
 object EuropaParkSeason extends DatedEventSource {
+    val name = "Europa Park"
+    val id = "europapark"
     val EuropaParkPreId = "europapark-pre-season"
     val EuropaParkPostId = "europapark-post-season"
 
     override def getEvents(year: Int, timeZone: TimeZone): Future[Seq[DatedEvent]] = successful(Seq(
-        DatedEvent(EuropaParkPreId, "Not open yet", of(year, JANUARY, 1), of(year, Month.APRIL, 5)),
-        DatedEvent(EuropaParkPostId, "Already closed", of(year, NOVEMBER, 6), of(year, DECEMBER, 31))
+        DatedEvent(EuropaParkPreId, "Not open yet", id, of(year, JANUARY, 1), of(year, Month.APRIL, 5)),
+        DatedEvent(EuropaParkPostId, "Already closed", id, of(year, NOVEMBER, 6), of(year, DECEMBER, 31))
     ))
 }

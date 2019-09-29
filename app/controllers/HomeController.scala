@@ -1,20 +1,19 @@
 package controllers
 
+import java.time.LocalDate
+
 import controllers.Assets.Asset
 import javax.inject._
-import play.api.cache.AsyncCacheApi
 import play.api.libs.json.Json
-import play.api.libs.ws.WSClient
 import play.api.mvc._
-import services.event.{FerienApi, InThePast, Weekends}
-import services.{SourcesExecutionContext, YearAnalyser}
+import services.{SourcesExecutionContext, YearResolver}
 
 /**
  * This controller creates an `Action` to handle HTTP requests to the
  * application's home page.
  */
 @Singleton
-class HomeController @Inject()(analyser: YearAnalyser, assets: Assets, private implicit val ec: SourcesExecutionContext, cache: AsyncCacheApi, client: WSClient, cc: ControllerComponents) extends AbstractController(cc) {
+class HomeController @Inject()(analyser: YearResolver, assets: Assets, private implicit val ec: SourcesExecutionContext, cc: ControllerComponents) extends AbstractController(cc) {
 
   /**
    * Create an Action to render an HTML page with a welcome message.
@@ -26,10 +25,11 @@ class HomeController @Inject()(analyser: YearAnalyser, assets: Assets, private i
     Ok(views.html.index())
   }
 
-  def theYear = Action.async {
-    val sources = Seq(Weekends, InThePast, new FerienApi(cache, client))
+  def thisYear() = theYear(LocalDate.now().getYear)
 
-    analyser.getCurrentYear(sources) map { year =>
+  def theYear(year: Int) = Action.async {
+
+    analyser.resolve(year) map { year =>
       Ok(Json.toJson(year))
     }
   }

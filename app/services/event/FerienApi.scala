@@ -15,6 +15,8 @@ import scala.concurrent.duration.DurationLong
 
 class FerienApi(cache: AsyncCacheApi, client: WSClient, states: Set[String] = FerienApi.AllStates.keys.toSet) extends DatedEventSource {
 
+    val name = "ferien-api.de"
+    val id = "ferien-api"
     private val baseUrl = "https://www.ferien-api.de/api/v1"
     private val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")
 
@@ -40,7 +42,7 @@ class FerienApi(cache: AsyncCacheApi, client: WSClient, states: Set[String] = Fe
             Future.sequence(states.toSeq.map { state =>
                 germanSchoolHolidaysFor(client, state, year).map { holidays =>
                     holidays.map { data =>
-                        DatedEvent(s"ferien-api-${data.slug}", s"${data.name} (${FerienApi.AllStates(state)})", LocalDate.parse(data.start, formatter), LocalDate.parse(data.end, formatter))
+                        DatedEvent(s"ferien-api-${data.slug}", s"${data.name} (${FerienApi.AllStates(state)})", id, LocalDate.parse(data.start, formatter), LocalDate.parse(data.end, formatter))
                     }
                 }
             }).map(_.flatten)
