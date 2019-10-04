@@ -12,6 +12,8 @@ resolvers += "Akka Snapshot Repository" at "http://repo.akka.io/snapshots/"
       
 scalaVersion := "2.13.1"
 
+turbo := true
+
 libraryDependencies ++= Seq(
     ehcache,
     ws,
