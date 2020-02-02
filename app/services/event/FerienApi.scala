@@ -17,7 +17,7 @@ class FerienApi(cache: AsyncCacheApi, client: WSClient, states: Set[String] = Fe
 
     val name = "ferien-api.de"
     val id = "ferien-api"
-    private val baseUrl = "https://www.ferien-api.de/api/v1"
+    private val baseUrl = "https://ferien-api.de/api/v1"
     private val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")
 
     case class Holidays(name: String, slug: String, year: Int, stateCode: String, start: String, end: String)
