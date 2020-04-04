@@ -2,14 +2,14 @@ node {
     def app
 
     def registry = "docker.cubyte.org"
-    def imageName = "${registry}/pschichtel/yearanalyser:latest"
+    def imageName = "${registry}/pschichtel/yearanalyser"
 
     stage('Clone repository') {
         checkout scm
     }
 
     stage('Build image') {
-        app = docker.build(imageName, "--pull .")
+        app = docker.build("${imageName}:latest", "--pull .")
     }
 
     stage('Push image') {
