@@ -4,7 +4,7 @@
 # ~~~~
 
 GET        /                    controllers.HomeController.index
-GET        /year                controllers.HomeController.thisYear
+GET        /year                controllers.HomeController.thisYear()
 GET        /year/:year          controllers.HomeController.theYear(year: Int)
 
 # Map static resources from the /public folder to the /assets URL path
