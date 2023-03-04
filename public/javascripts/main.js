@@ -53,6 +53,21 @@ function buildYear(yearData) {
     let monthContainer;
     let weekDays;
 
+    let daysWithEvents = 0;
+    let maxEventsPerDay = 0;
+    let totalNumberOfEvents = 0;
+    for (let day of yearData.days) {
+        const eventCount = day.events.length;
+        totalNumberOfEvents += eventCount;
+        if (eventCount > 0) {
+            daysWithEvents++;
+        }
+        if (eventCount > maxEventsPerDay) {
+            maxEventsPerDay = eventCount;
+        }
+    }
+    let avgEventsPerDay = totalNumberOfEvents / daysWithEvents;
+
     for (let dayData of yearData.days) {
         let date = new Date(dayData.date);
         let thisDayOfWeek = dayData.dayOfWeek;
@@ -92,10 +107,15 @@ function buildYear(yearData) {
         day.dataset.dayOfWeek = thisDayOfWeek;
         day.dataset.weekOfYear = thisWeekOfYear;
 
+        const hue = Math.round(100 * (1 - (dayData.events.length / avgEventsPerDay)))
+        day.style.backgroundColor = `hsl(${hue}, 100%, 80%)`
+        console.log(avgEventsPerDay)
+
         if (dayData.events.length > 0) {
             day.dataset.events = JSON.stringify(dayData.events);
             day.addEventListener('click', openInfoPopup);
             day.classList.add('has-events')
+
         } else {
             day.classList.add('no-events')
         }

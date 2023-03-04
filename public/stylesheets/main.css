@@ -43,7 +43,6 @@ html, body {
     vertical-align: middle;
 }
 #year .day.no-events {
-    color: rgb(210, 210, 210);
 }
 
 #year .day:hover {
