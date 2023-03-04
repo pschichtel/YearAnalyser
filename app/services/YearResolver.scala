@@ -62,7 +62,6 @@ class YearResolver @Inject()(timeZone: TimeZone, cache: AsyncCacheApi, client: W
         val countryName = path.getFileName.toString
         listFiles(path, ICalSource.FileExtension)
             .map(convertCountryCalendar(year, countryName))
-
     }
 
     private def convertCountryCalendar(year: Int, countryName: String)(path: Path): DatedEventSource = {

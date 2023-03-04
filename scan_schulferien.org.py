@@ -23,6 +23,7 @@ def sluggify(str, country):
     if country == 'norwegen':
         string_substitutions.insert(0, ('ö', 'o'))
         string_substitutions.insert(0, ('süd-', 'sor-'))
+        string_substitutions.insert(0, ('west-', 'vest-'))
         string_substitutions.append((' und ', ' og '))
         string_substitutions.append(('trondelag', 'trndelag'))
 
@@ -50,8 +51,9 @@ countries = {'deutschland': 'Germany',
              'polen': 'Poland',
              'slowakei': 'Slovakia',
              'tschechien': 'Czech Republic'}
-years = {'2019', '2020'}
-key = 'gtKpiU0wvhD-I4OeolKZEgP6SHnlBeqLqQUcj6odAtI2Cnqdip0IE9IhzrbL2Yu3zeAQZMt9dAX2lMkqRhq-fRnbfI3nHecFZbMC6kOFdp8'
+years = {'2022', '2023', '2024'}
+# looks like a secret, but it really isn't
+key = '4SEhsct7NNnmgiUSwBa3ehZNoy31R7gQyfFhKAEKql_D9l2xpXJxeKeZYWSQuroXZfCJ6wKmhzpIZeYUmkWjNn7b6lB3BVcZhOIT2ZjFbS4'
 
 url_tpl = 'https://www.schulferien.org/{}/ical/'
 
@@ -86,6 +88,8 @@ for filename, url, country_name, year in urls:
     if result.status_code == 200:
         with open(target, 'wb') as f:
             f.write(result.content)
+    else:
+        print(f'Download of {url} failed: {result.status_code}')
 
 
 

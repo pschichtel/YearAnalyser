@@ -65,7 +65,7 @@ trait ICalSource { self: DatedEventSource =>
             for (event <- ical.getEvents.asScala.toSeq) yield {
                 val start = dateInZone(event.getDateStart)
                 val end = dateInZone(event.getDateEnd)
-                val name = event.getSummary.getValue
+                val name = s"${event.getSummary.getValue} (Source: ${this.name})"
                 val id = TextHelper.normalizeString(name, "some-event")
                 DatedEvent(id, name, self.id, start, end)
             }

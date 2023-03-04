@@ -18,7 +18,8 @@ class FerienApi(cache: AsyncCacheApi, client: WSClient, states: Set[String] = Fe
     val name = "ferien-api.de"
     val id = "ferien-api"
     private val baseUrl = "https://ferien-api.de/api/v1"
-    private val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")
+    private val formatterFullIsoDate = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")
+    private val formatterDateOnly = DateTimeFormatter.ofPattern("yyyy-MM-dd")
 
     case class Holidays(name: String, slug: String, year: Int, stateCode: String, start: String, end: String)
 
@@ -30,7 +31,7 @@ class FerienApi(cache: AsyncCacheApi, client: WSClient, states: Set[String] = Fe
         override def reads(json: JsValue): JsResult[LocalDate] = {
             json match {
                 case JsString(dateString) =>
-                    JsSuccess(LocalDate.parse(dateString, formatter))
+                    JsSuccess(LocalDate.parse(dateString, formatterFullIsoDate))
                 case _ => JsError("string expected")
             }
         }
@@ -42,7 +43,7 @@ class FerienApi(cache: AsyncCacheApi, client: WSClient, states: Set[String] = Fe
             Future.sequence(states.toSeq.map { state =>
                 germanSchoolHolidaysFor(client, state, year).map { holidays =>
                     holidays.map { data =>
-                        DatedEvent(s"ferien-api-${data.slug}", s"${data.name} (${FerienApi.AllStates(state)})", id, LocalDate.parse(data.start, formatter), LocalDate.parse(data.end, formatter))
+                        DatedEvent(s"ferien-api-${data.slug}", s"${data.name} (${FerienApi.AllStates(state)})", id, LocalDate.parse(data.start, formatterDateOnly), LocalDate.parse(data.end, formatterDateOnly))
                     }
                 }
             }).map(_.flatten)
