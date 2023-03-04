@@ -6,13 +6,12 @@ import java.time.LocalDate.ofYearDay
 import java.time.temporal.ChronoUnit.DAYS
 import java.time.temporal.IsoFields
 import java.util.TimeZone
-
 import javax.inject._
 import play.api.Configuration
 import play.api.cache.AsyncCacheApi
 import play.api.libs.json.{Format, Json}
 import play.api.libs.ws.WSClient
-import services.event.{DatedEvent, DatedEventSource, FerienApi, ICalSource, InThePast, LocalICalSource, Weekends}
+import services.event.{DatedEvent, DatedEventSource, EuropaParkSeason, FerienApi, ICalSource, InThePast, LocalICalSource, Weekends}
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.jdk.CollectionConverters._
@@ -43,7 +42,7 @@ class YearResolver @Inject()(timeZone: TimeZone, cache: AsyncCacheApi, client: W
 
     private def staticSources = Seq(Weekends, InThePast, new FerienApi(cache, client))
     private def sourcesPerYear = scanSchulferienOrg()
-    private def sources(year: Int) = staticSources ++ sourcesPerYear.getOrElse(year, Seq.empty)
+    private def sources(year: Int) = staticSources ++ sourcesPerYear.getOrElse(year, Seq.empty) :+ EuropaParkSeason
 
     private def scanSchulferienOrg(): Map[Int, Seq[DatedEventSource]] = {
         listFolders(schulferienOrgDir)
