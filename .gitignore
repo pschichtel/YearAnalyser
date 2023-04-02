@@ -15,3 +15,7 @@ dist
 /.settings
 /data
 /conf/local.conf
+/.bsp/
+.bloop/
+/.metals/
+project/metals.sbt
