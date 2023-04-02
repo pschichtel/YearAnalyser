@@ -43,8 +43,6 @@ html, body {
     vertical-align: middle;
     line-height: 40px;
 }
-#year .day.no-events {
-}
 
 #year .day:hover {
     background-color: rgb(206, 206, 206);
@@ -55,6 +53,12 @@ html, body {
 }
 #year .weekday-6, #year .weekday-7 {
     background-color: rgb(243, 243, 243);
+}
+
+#year .month .title {
+    text-align: center;
+    padding: 3px;
+    font-weight: bold;
 }
 
 #year .week:hover,

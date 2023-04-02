@@ -13,6 +13,21 @@ function lerp(low, high, t) {
     return low + (high - low) * t;
 }
 
+const months = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+];
+
 function openInfoPopup(e) {
     e.preventDefault();
     let events = JSON.parse(e.target.dataset.events);
@@ -87,6 +102,12 @@ function buildYear(yearData) {
             weekOfYear = null;
             monthContainer = document.createElement('div');
             monthContainer.classList.add('month', 'month-' + thisMonth);
+
+            const monthTitle = document.createElement('div');
+            monthTitle.classList.add('title');
+            monthTitle.innerText = months[month];
+            monthContainer.appendChild(monthTitle);
+
             yearContainer.appendChild(monthContainer);
         }
 
