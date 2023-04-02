@@ -5,6 +5,14 @@ function handleMouseOut(e) {
     e.target.parentElement.parentElement.parentElement.classList.remove('active-weekday-' + e.target.dataset.dayOfWeek);
 }
 
+const minimumHue = 120;
+const averageHue = 0;
+const maximumHue = -120;
+
+function lerp(low, high, t) {
+    return low + (high - low) * t;
+}
+
 function openInfoPopup(e) {
     e.preventDefault();
     let events = JSON.parse(e.target.dataset.events);
@@ -107,8 +115,13 @@ function buildYear(yearData) {
         day.dataset.dayOfWeek = thisDayOfWeek;
         day.dataset.weekOfYear = thisWeekOfYear;
 
-        const hue = Math.round(100 * (1 - (dayData.events.length / avgEventsPerDay)))
-        day.style.backgroundColor = `hsl(${hue}, 100%, 80%)`
+        let hue = 0;
+        if (dayData.events.length > avgEventsPerDay) {
+            hue = lerp(averageHue, maximumHue, (dayData.events.length - avgEventsPerDay) / (maxEventsPerDay - avgEventsPerDay))
+        } else {
+            hue = lerp(minimumHue, averageHue, dayData.events.length / avgEventsPerDay)
+        }
+        day.style.backgroundColor = `hsl(${hue}, 100%, 60%)`
         console.log(avgEventsPerDay)
 
         if (dayData.events.length > 0) {
