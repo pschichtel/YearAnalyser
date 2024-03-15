@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import os
 
 from requests import *
@@ -51,9 +53,9 @@ countries = {'deutschland': 'Germany',
              'polen': 'Poland',
              'slowakei': 'Slovakia',
              'tschechien': 'Czech Republic'}
-years = {'2022', '2023', '2024'}
+years = {'2023', '2024', '2025'}
 # looks like a secret, but it really isn't
-key = '4SEhsct7NNnmgiUSwBa3ehZNoy31R7gQyfFhKAEKql_D9l2xpXJxeKeZYWSQuroXZfCJ6wKmhzpIZeYUmkWjNn7b6lB3BVcZhOIT2ZjFbS4'
+key = 'BR90NCGhfxv-Z91HKSscn3lajiq-uy0cN02pJYlzhSRzQvXS8dngqqQbPOCgOgmM3L1aqZFcX76KQrIu6fv01MqOOVQJUMyIra5tB2m2crM'
 
 url_tpl = 'https://www.schulferien.org/{}/ical/'
 
