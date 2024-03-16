@@ -45,7 +45,7 @@ trait ICalSource { self: DatedEventSource =>
     def parse(source: String): Seq[ICalendar] =
         getAll(Biweekly.parse(source))
 
-    def getAll(parser: ChainingTextParser[_]): Seq[ICalendar] =
+    def getAll(parser: ChainingTextParser[?]): Seq[ICalendar] =
         parser.all().asScala.toSeq
 
     def convertICal(defaultTimezone: TimeZone, source: String): Seq[DatedEvent] =
