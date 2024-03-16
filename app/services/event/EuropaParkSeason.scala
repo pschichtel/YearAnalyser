@@ -15,7 +15,7 @@ object EuropaParkSeason extends DatedEventSource {
     val EuropaParkPostId = "europapark-post-season"
 
     override def getEvents(year: Int, timeZone: TimeZone): Future[Seq[DatedEvent]] = successful(Seq(
-        DatedEvent(EuropaParkPreId, "Not open yet", id, of(year, JANUARY, 1), of(year, Month.MARCH, 24)),
+        DatedEvent(EuropaParkPreId, "Not open yet", id, of(year, JANUARY, 1), of(year, Month.MARCH, 23)),
         DatedEvent(EuropaParkPostId, "Already closed", id, of(year, NOVEMBER, 6), of(year, DECEMBER, 31))
     ))
 }
