@@ -6,7 +6,7 @@ lazy val `yearanalyser` = (project in file("."))
     .enablePlugins(PlayScala)
     .enablePlugins(AshScriptPlugin)
       
-scalaVersion := "3.6.1"
+scalaVersion := "3.6.2"
 
 turbo := true
 
