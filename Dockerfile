@@ -1,4 +1,4 @@
-FROM mozilla/sbt:latest AS build
+FROM mozilla/sbt:latest@sha256:df8eeb6a4c1752ae722aa638a5052627426bee5b7a321212b797d8c92dbd44e8 AS build
 
 RUN mkdir /build
 
@@ -14,7 +14,7 @@ ADD . /build/
 RUN sbt -no-colors dist \
  && unzip target/universal/yearanalyser-*.zip
 
-FROM adoptopenjdk/openjdk12:alpine-slim
+FROM adoptopenjdk/openjdk12:alpine-slim@sha256:dfa9585ad7318215493b1c2c47b934c27ceafcf3288949a65a4cf059b1c00cb5
 
 RUN apk update && apk add --no-cache curl
 
